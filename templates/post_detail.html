@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+
+{% block head_title %}
+{{ instance.title }} | {{ block.super }}
+{% endblock head_title %}
+
+{% block content %}
+
+<div class="col-sm-8 col-sm-offset-3">
+    {% if instance.image %}
+    <img src="{{ instance.image.url }}" alt="" class="img-responsive card-img-top">
+    {% endif %}
+    <h1>{{ title }}</h1>{% if instance.draft %}<span style='color:red;'>Draft </span>{% endif %}<small>{{ instance.publish }}</small>
+
+    {% if instance.user.get_full_name %}
+    <p>Author: {{ instance.user.get_full_name }}</p>
+    {% endif %}
+    <hr/>
+    <p>{{ instance.content|linebreaks }}</p>
+    <hr/>
+    <br>
+    <div class="fb-comments" data-href="{{ request.build_absolute_uri }}" data-numposts="5"></div>
+
+</div>
+
+
+{% endblock content %}
+
+
+

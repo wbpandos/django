@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>{{ title }}</h1>
+<form action="" method="GET">
+    <input type="text" name="q" placeholder="Search Posts" value="{{ request.GET.q }}">
+    <input type="submit" value="Search" />
+</form>
+
+{% for obj in object_list %}
+
+<div class="card col-sm-8 mb-4">
+    {% if obj.image %}
+    <img class="card-img-top img-responsive" src="{{ obj.image.url }}" alt="Card image cap">
+    {% endif %}
+    <div class="card-body">
+        <h5 class="card-title">{{ obj.title }} <small>{{ obj.publish|timesince }}</small></h5>
+        {% if obj.user.get_full_name %}
+        <p>Author: {{ obj.user.get_full_name }}</p>
+        {% endif %}
+        <p class="card-text">{{ obj.content|linebreaks|truncatechars:200 }}</p>
+        <a href="{{ obj.get_absolute_url }}" class="btn btn-primary">View</a>
+    </div>
+</div>
+
+{% endfor %}
+
+<div class="pagination">
+    <span class="step-links">
+        {% if object_list.has_previous %}
+            <a href="?{{ page_request_var }}">&laquo; first</a>
+            <a href="?{{ page_request_var }}={{ object_list.previous_page_number }}{% if request.Get.q %}&q={{ request.Get.q }}{% endif %}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.
+        </span>
+
+        {% if object_list.has_next %}
+            <a href="?{{ page_request_var }}={{ object_list.next_page_number }}{% if request.Get.q %}&q={{ request.Get.q }}{% endif %}">next</a>
+            <a href="?{{ page_request_var }}={{ object_list.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+{% endblock content %}
